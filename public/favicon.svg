@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient: Deep Velvet Burgundy to Pitch Black -->
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#4e0e18" />
+      <stop offset="60%" stop-color="#1e0509" />
+      <stop offset="100%" stop-color="#070203" />
+    </radialGradient>
+
+    <!-- Metallic Gold Gradient matching NROR emblem -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5d6" />
+      <stop offset="35%" stop-color="#e8c76b" />
+      <stop offset="70%" stop-color="#b68925" />
+      <stop offset="100%" stop-color="#f5e09b" />
+    </linearGradient>
+
+    <!-- Subtle inner rim gold glow -->
+    <linearGradient id="goldRim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#eed177" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#9e7b1a" stop-opacity="0.4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Flacon Octagon / Soft Beveled Diamond Frame -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bgGrad)" stroke="url(#goldRim)" stroke-width="1.75" />
+  <rect x="5.5" y="5.5" width="53" height="53" rx="11" fill="none" stroke="#dfba50" stroke-width="0.75" stroke-opacity="0.35" />
+
+  <!-- Perfume Cap Top Accent Bar -->
+  <rect x="25" y="8.5" width="14" height="3" rx="1" fill="url(#goldGrad)" />
+
+  <!-- Central "N" Monogram with Serif Flairs from Bottle Emblem -->
+  <!-- Left stem with serifs -->
+  <polygon points="17,17 23.5,17 23.5,19.5 21,19.5 21,44.5 23.5,44.5 23.5,47 17,47 17,44.5 19.5,44.5 19.5,19.5 17,19.5" fill="url(#goldGrad)" />
+
+  <!-- Diagonal stroke -->
+  <polygon points="19.5,17 24.5,17 44.5,45 44.5,47 39.5,47 19.5,19" fill="url(#goldGrad)" />
+
+  <!-- Right stem with serifs -->
+  <polygon points="40.5,17 47,17 47,19.5 44.5,19.5 44.5,44.5 47,44.5 47,47 40.5,47 40.5,44.5 43,44.5 43,19.5 40.5,19.5" fill="url(#goldGrad)" />
+
+  <!-- Subtle Bottom Serif Accent Bar -->
+  <line x1="26" y1="52.5" x2="38" y2="52.5" stroke="url(#goldGrad)" stroke-width="1.2" stroke-linecap="round" />
+</svg>

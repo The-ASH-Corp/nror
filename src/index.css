@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primaryColor: #350810;
+  --secondaryColor: #780F27;
+  --goldColor: #C49A58;
+  --silverColor: #E6E2DF;
+}
+
+@layer base {
+  body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--silverColor);
+    background-color: var(--primaryColor);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* Animations for Splash & Floating */
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+.animate-gentle-float {
+  animation: gentleFloat 5s ease-in-out infinite;
+}
+
+/* Reusable Theme Utilities using the 4 defined variables */
+.border-gold {
+  border-color: rgba(196, 154, 88, 0.25);
+}
+
+.border-gold-hover:hover {
+  border-color: rgba(196, 154, 88, 0.6);
+}
+
+.gold-gradient-btn {
+  background: linear-gradient(135deg, #dfba7f 0%, var(--goldColor) 60%, #9a7538 100%);
+  color: var(--primaryColor);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  transition: all 0.3s ease;
+}
+
+.gold-gradient-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 20px rgba(196, 154, 88, 0.3);
+}
+
+.card-luxury {
+  background: linear-gradient(180deg, rgba(120, 15, 39, 0.25) 0%, rgba(53, 8, 16, 0.95) 100%);
+  border: 1px solid rgba(196, 154, 88, 0.2);
+  transition: all 0.3s ease;
+}
+
+.card-luxury:hover {
+  border-color: rgba(196, 154, 88, 0.55);
+}
