@@ -61,6 +61,80 @@
   box-shadow: 0 4px 20px rgba(196, 154, 88, 0.3);
 }
 
+/* ---------- Extra motion utilities (additive, theme-preserving) ---------- */
+
+/* Light sweep across gold buttons on hover */
+.gold-gradient-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.gold-gradient-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
+  transform: skewX(-20deg);
+  pointer-events: none;
+  transition: left 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gold-gradient-btn:hover::after {
+  left: 125%;
+}
+
+/* Slow gold shimmer drift on gradient headlines */
+@keyframes goldShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.text-shimmer {
+  background-size: 200% auto;
+  animation: goldShimmer 6s ease-in-out infinite alternate;
+}
+
+/* Glass shine sweep over product images on card hover */
+.image-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 236, 200, 0.18) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .image-shine {
+  transform: translateX(120%);
+}
+
+/* Animated gold underline for footer links */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: var(--goldColor);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer { animation: none; }
+  .gold-gradient-btn::after,
+  .image-shine { transition: none; }
+}
+
 .card-luxury {
   background: linear-gradient(180deg, rgba(120, 15, 39, 0.25) 0%, rgba(53, 8, 16, 0.95) 100%);
   border: 1px solid rgba(196, 154, 88, 0.2);

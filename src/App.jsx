@@ -12,8 +12,59 @@ import {
   Instagram,
   Facebook
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import BottleSplashAnimation from './components/BottleSplashAnimation';
+
+// Deterministic floating gold particles (decorative only)
+const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
+  left: (i * 37 + 11) % 100,
+  top: (i * 53 + 7) % 100,
+  size: 2 + (i % 3),
+  duration: 7 + (i % 5) * 1.6,
+  delay: (i % 6) * 0.9,
+  drift: i % 2 === 0 ? 14 : -14,
+}));
+
+function FloatingParticles({ count = 18 }) {
+  return (
+    <div aria-hidden="true" className="absolute inset-0 pointer-events-none overflow-hidden">
+      {PARTICLES.slice(0, count).map((p, i) => (
+        <motion.span
+          key={i}
+          className="absolute rounded-full bg-goldColor"
+          style={{
+            left: `${p.left}%`,
+            top: `${p.top}%`,
+            width: p.size,
+            height: p.size,
+            boxShadow: '0 0 8px rgba(196,154,88,0.7)',
+          }}
+          animate={{ y: [0, -40, 0], x: [0, p.drift, 0], opacity: [0, 0.7, 0] }}
+          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ScrollProgressBar() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
+  return (
+    <motion.div
+      aria-hidden="true"
+      style={{ scaleX }}
+      className="fixed top-0 left-0 right-0 h-[2px] origin-left z-[60] bg-gradient-to-r from-secondaryColor via-goldColor to-[#f5dfa9]"
+    />
+  );
+}
+
+// Gentle idle float + hover spin for benefit icons
+const iconFloat = (delay = 0) => ({
+  animate: { y: [0, -5, 0] },
+  transition: { duration: 3.2, delay, repeat: Infinity, ease: 'easeInOut' },
+  whileHover: { rotate: [0, -12, 12, 0], scale: 1.12, transition: { duration: 0.6 } },
+});
 
 const products = [
   {
@@ -180,8 +231,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-primaryColor text-silverColor font-sans antialiased selection:bg-secondaryColor selection:text-goldColor overflow-x-hidden">
-
-      {/* FLOATING PILL NAVBAR - APPLE STYLE SPRING IN */}
+      <ScrollProgressBar />
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -224,7 +274,7 @@ export default function App() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 + i * 0.08, ease: appleEase }}
-                  className="bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent hover:text-goldColor transition-colors whitespace-nowrap"
+                  className="text-shimmer bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent hover:text-goldColor transition-colors whitespace-nowrap"
                   whileHover={{ scale: 1.05 }}
                 >
                   {link.label}
@@ -353,6 +403,7 @@ export default function App() {
             className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-[#C49A58]/10 rounded-full blur-3xl"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-primaryColor/60 via-transparent to-primaryColor"></div>
+          <FloatingParticles count={14} />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
@@ -376,7 +427,7 @@ export default function App() {
                 variants={textReveal}
                 initial="hidden"
                 animate="visible"
-                className="bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-4xl sm:text-5xl md:text-4xl lg:text-6xl font-bold tracking-tight leading-[1.08]"
+                className="text-shimmer bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-4xl sm:text-5xl md:text-4xl lg:text-6xl font-bold tracking-tight leading-[1.08]"
               >
                 LEAVE A LASTING IMPRESSION
               </motion.h1>
@@ -446,7 +497,7 @@ export default function App() {
 
           <motion.h2
             variants={textReveal}
-            className="bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl font-normal leading-snug"
+            className="text-shimmer bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl font-normal leading-snug"
           >
             Beyond Fragrance. Beyond Ordinary.
           </motion.h2>
@@ -492,7 +543,7 @@ export default function App() {
 
             <motion.h2
               variants={textReveal}
-              className="bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl font-normal"
+              className="text-shimmer bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl font-normal"
             >
               Find Your Signature.
             </motion.h2>
@@ -531,6 +582,7 @@ export default function App() {
                       transition={{ duration: 0.8, ease: appleEase }}
                       className="w-full h-full object-cover"
                     />
+                    <div aria-hidden="true" className="image-shine" />
                   </div>
 
                   {/* Card Content */}
@@ -557,7 +609,6 @@ export default function App() {
 
                 <div className="p-7 sm:p-8 pt-0">
                   <motion.button
-                    onClick={() => handleAddToCart(item)}
                     className="w-full py-3.5 gold-gradient-btn text-xs uppercase tracking-[0.16em] rounded-xs flex items-center justify-center space-x-2"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -610,9 +661,9 @@ export default function App() {
               whileHover={{ y: -6, transition: { duration: 0.35, ease: appleEase } }}
               className="card-luxury p-8 rounded-xs space-y-4 text-center sm:text-left"
             >
-              <div className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0 group-hover:scale-110 transition-transform">
+              <motion.div {...iconFloat(0)} className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0">
                 <Sparkles size={20} />
-              </div>
+              </motion.div>
               <h3 className="font-serif text-xl font-normal text-white">
                 Distinctive Identity
               </h3>
@@ -627,9 +678,9 @@ export default function App() {
               whileHover={{ y: -6, transition: { duration: 0.35, ease: appleEase } }}
               className="card-luxury p-8 rounded-xs space-y-4 text-center sm:text-left"
             >
-              <div className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0">
+              <motion.div {...iconFloat(0.4)} className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0">
                 <Package size={20} />
-              </div>
+              </motion.div>
               <h3 className="font-serif text-xl font-normal text-white">
                 Premium Presentation
               </h3>
@@ -644,9 +695,9 @@ export default function App() {
               whileHover={{ y: -6, transition: { duration: 0.35, ease: appleEase } }}
               className="card-luxury p-8 rounded-xs space-y-4 text-center sm:text-left"
             >
-              <div className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0">
+              <motion.div {...iconFloat(0.8)} className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0">
                 <Award size={20} />
-              </div>
+              </motion.div>
               <h3 className="font-serif text-xl font-normal text-white">
                 Timeless Elegance
               </h3>
@@ -661,9 +712,9 @@ export default function App() {
               whileHover={{ y: -6, transition: { duration: 0.35, ease: appleEase } }}
               className="card-luxury p-8 rounded-xs space-y-4 text-center sm:text-left"
             >
-              <div className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0">
+              <motion.div {...iconFloat(1.2)} className="w-12 h-12 rounded-xs bg-secondaryColor/30 border border-goldColor/40 flex items-center justify-center text-goldColor mx-auto sm:mx-0">
                 <Flame size={20} />
-              </div>
+              </motion.div>
               <h3 className="font-serif text-xl font-normal text-white">
                 Make an Impression
               </h3>
@@ -679,6 +730,7 @@ export default function App() {
       {/* SECTION 05 – EMOTIONAL BRAND STATEMENT */}
       <section className="py-24 md:py-32 bg-gradient-to-b from-primaryColor via-secondaryColor/40 to-primaryColor text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(196,154,88,0.08)_0,transparent_70%)] pointer-events-none"></div>
+        <FloatingParticles count={18} />
 
         <motion.div
           initial="hidden"
@@ -689,7 +741,7 @@ export default function App() {
         >
           <motion.h2
             variants={textReveal}
-            className="bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide leading-tight"
+            className="text-shimmer bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-wide leading-tight"
           >
             YOUR PRESENCE. YOUR IDENTITY. YOUR NROR.
           </motion.h2>
@@ -719,7 +771,7 @@ export default function App() {
         >
           <motion.h2
             variants={textReveal}
-            className="bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl font-normal"
+            className="text-shimmer bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-3xl sm:text-4xl md:text-5xl font-normal"
           >
             Make Every Moment Memorable.
           </motion.h2>
@@ -777,12 +829,12 @@ export default function App() {
               Explore
             </p>
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs">
-              <a href="#hero" className="hover:text-goldColor transition-colors">Home</a>
-              <a href="#collection" className="hover:text-goldColor transition-colors">Collection</a>
-              <a href="#about" className="hover:text-goldColor transition-colors">About Us</a>
-              <a href="#contact" className="hover:text-goldColor transition-colors">Contact Us</a>
-              <a href="#" className="hover:text-goldColor transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-goldColor transition-colors">Terms & Conditions</a>
+              <a href="#hero" className="link-underline hover:text-goldColor transition-colors">Home</a>
+              <a href="#collection" className="link-underline hover:text-goldColor transition-colors">Collection</a>
+              <a href="#about" className="link-underline hover:text-goldColor transition-colors">About Us</a>
+              <a href="#contact" className="link-underline hover:text-goldColor transition-colors">Contact Us</a>
+              <a href="#" className="link-underline hover:text-goldColor transition-colors">Privacy Policy</a>
+              <a href="#" className="link-underline hover:text-goldColor transition-colors">Terms & Conditions</a>
             </div>
           </div>
 
