@@ -12,8 +12,30 @@ import {
   Instagram,
   Facebook
 } from 'lucide-react';
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import BottleSplashAnimation from './components/BottleSplashAnimation';
+
+// Scroll-linked section wrapper: sections ease in as they enter and soften as they leave,
+// so one section blends into the next instead of cutting hard.
+function SmoothSection({ variant = 'default', children, ...rest }) {
+  const ref = useRef(null);
+  const isHero = variant === 'hero';
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: isHero ? ['start start', 'end start'] : ['start end', 'end start'],
+  });
+  const p = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
+
+  const opacity = useTransform(p, isHero ? [0, 1] : [0, 0.2, 0.88, 1], isHero ? [1, 0.2] : [0.15, 1, 1, 0.55]);
+  const y = useTransform(p, isHero ? [0, 1] : [0, 0.2], isHero ? [0, -60] : [70, 0]);
+  const scale = useTransform(p, isHero ? [0, 1] : [0, 0.2], isHero ? [1, 0.95] : [0.97, 1]);
+
+  return (
+    <motion.section ref={ref} style={{ opacity, y, scale, willChange: 'transform, opacity' }} {...rest}>
+      {children}
+    </motion.section>
+  );
+}
 
 // Deterministic floating gold particles (decorative only)
 const PARTICLES = Array.from({ length: 18 }, (_, i) => ({
@@ -150,28 +172,32 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(products[0]);
   const [toastMessage, setToastMessage] = useState('');
 
-  // Wheel / Touch interception: Keep page scroll-locked at 100vh until all frames finish,
-  // and reverse frames from last to first when scrolling back up at the top
   const heroProgressRef = useRef(0);
-  const [heroProgress, setHeroProgress] = useState(0);
 
   useEffect(() => {
+    const normalizeWheel = (e) => {
+      let d = e.deltaY;
+      if (e.deltaMode === 1) d *= 16;
+      else if (e.deltaMode === 2) d *= window.innerHeight;
+      return Math.max(-80, Math.min(80, d));
+    };
+
     const onWheel = (e) => {
       const isAtTop = window.scrollY <= 10;
 
       // 1. Scrolling down from top before frames complete: advance frames
       if (isAtTop && e.deltaY > 0 && heroProgressRef.current < 1) {
         e.preventDefault();
-        const next = Math.min(1, heroProgressRef.current + e.deltaY * 0.0012);
+        const next = Math.min(1, heroProgressRef.current + normalizeWheel(e) * 0.0009);
         heroProgressRef.current = next;
-        setHeroProgress(next);
+
       }
       // 2. Scrolling up when at the top: scrub backwards from last frame to first
       else if (isAtTop && e.deltaY < 0 && heroProgressRef.current > 0) {
         e.preventDefault();
-        const prev = Math.max(0, heroProgressRef.current + e.deltaY * 0.0012);
+        const prev = Math.max(0, heroProgressRef.current + normalizeWheel(e) * 0.0009);
         heroProgressRef.current = prev;
-        setHeroProgress(prev);
+
       }
     };
 
@@ -191,7 +217,7 @@ export default function App() {
         e.preventDefault();
         const next = Math.min(1, heroProgressRef.current + deltaY * 0.004);
         heroProgressRef.current = next;
-        setHeroProgress(next);
+
         touchStartY = touchY;
       }
       // Scrolling up while at the top: reverse frames back towards frame 1
@@ -199,7 +225,7 @@ export default function App() {
         e.preventDefault();
         const prev = Math.max(0, heroProgressRef.current + deltaY * 0.004);
         heroProgressRef.current = prev;
-        setHeroProgress(prev);
+
         touchStartY = touchY;
       }
     };
@@ -389,8 +415,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* SECTION 01 – HERO BANNER (FIXED 100vh - NO HEIGHT EXTENSION) */}
-      <section id="hero" className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-primaryColor pt-20 sm:pt-24 lg:pt-0">
-        {/* Soft Ambient Background Lighting with Motion Glow */}
+      <SmoothSection variant="hero" id="hero" className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-primaryColor pt-20 sm:pt-24 lg:pt-0">
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <motion.div
             animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
@@ -472,15 +497,15 @@ export default function App() {
 
             {/* Right Column: Scroll-Scrub Animation */}
             <div className="lg:col-span-6 flex items-center justify-center w-full pt-10">
-              <BottleSplashAnimation progress={heroProgress} />
+              <BottleSplashAnimation progressRef={heroProgressRef} />
             </div>
 
           </div>
         </div>
-      </section>
+      </SmoothSection>
 
       {/* SECTION 02 – BRAND INTRODUCTION */}
-      <section id="about" className="py-24 md:py-32 bg-primaryColor relative overflow-hidden">
+      <SmoothSection id="about" className="py-24 md:py-32 bg-primaryColor relative overflow-hidden">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -521,10 +546,10 @@ export default function App() {
             Discover the NROR difference.
           </motion.p>
         </motion.div>
-      </section>
+      </SmoothSection>
 
       {/* SECTION 03 – PRODUCT COLLECTION */}
-      <section id="collection" className="py-24 md:py-32 relative">
+      <SmoothSection id="collection" className="py-24 md:py-32 relative">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
 
           <motion.div
@@ -623,10 +648,10 @@ export default function App() {
           </div>
 
         </div>
-      </section>
+      </SmoothSection>
 
       {/* SECTION 04 – BRAND BENEFITS */}
-      <section id="experience" className="py-24 md:py-32 bg-primaryColor relative">
+      <SmoothSection id="experience" className="py-24 md:py-32 bg-primaryColor relative">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
 
           <motion.div
@@ -725,10 +750,10 @@ export default function App() {
           </motion.div>
 
         </div>
-      </section>
+      </SmoothSection>
 
       {/* SECTION 05 – EMOTIONAL BRAND STATEMENT */}
-      <section className="py-24 md:py-32 bg-gradient-to-b from-primaryColor via-secondaryColor/40 to-primaryColor text-center relative overflow-hidden">
+      <SmoothSection className="py-24 md:py-32 bg-gradient-to-b from-primaryColor via-secondaryColor/40 to-primaryColor text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(196,154,88,0.08)_0,transparent_70%)] pointer-events-none"></div>
         <FloatingParticles count={18} />
 
@@ -758,10 +783,10 @@ export default function App() {
             An unforgettable fragrance is not just worn. It is experienced.
           </motion.p>
         </motion.div>
-      </section>
+      </SmoothSection>
 
       {/* SECTION 06 – FINAL CALL TO ACTION */}
-      <section id="contact" className="py-24 md:py-32 bg-primaryColor text-center relative">
+      <SmoothSection id="contact" className="py-24 md:py-32 bg-primaryColor text-center relative">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -798,7 +823,7 @@ export default function App() {
             </motion.a>
           </motion.div>
         </motion.div>
-      </section>
+      </SmoothSection>
 
       {/* 5. FOOTER CONTENT */}
       <footer className="bg-primaryColor text-silverColor/70 text-xs py-16 relative">
