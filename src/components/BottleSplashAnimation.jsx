@@ -148,21 +148,26 @@ export default function BottleSplashAnimation({ progressRef }) {
   }, []);
 
   return (
-    <div className="relative w-full max-w-[740px] aspect-[16/9] mx-auto flex items-center justify-center select-none pointer-events-none">
+    <div className="relative w-full lg:w-[108%] lg:-mr-4 max-w-[960px] aspect-[16/10] mx-auto flex items-center justify-center select-none pointer-events-none">
       <canvas
         ref={canvasRef}
         className="w-full h-full block"
         style={{
           WebkitMaskImage:
-            'radial-gradient(ellipse 58% 54% at 54% 50%, black 15%, rgba(0,0,0,0.8) 38%, rgba(0,0,0,0.3) 60%, transparent 85%)',
+            'radial-gradient(ellipse 58% 60% at 49% 50%, black 26%, rgba(0,0,0,0.85) 48%, rgba(0,0,0,0.35) 68%, transparent 88%)',
           maskImage:
-            'radial-gradient(ellipse 58% 54% at 54% 50%, black 15%, rgba(0,0,0,0.8) 38%, rgba(0,0,0,0.3) 60%, transparent 85%)',
+            'radial-gradient(ellipse 58% 60% at 49% 50%, black 26%, rgba(0,0,0,0.85) 48%, rgba(0,0,0,0.35) 68%, transparent 88%)',
           willChange: 'contents',
         }}
       />
+      {/* Extra right-edge feather so the right border melts seamlessly into the hero background */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-radial from-secondaryColor/20 via-transparent to-transparent blur-3xl pointer-events-none -z-10"
+        className="absolute inset-y-0 right-0 w-24 sm:w-32 bg-gradient-to-l from-primaryColor via-primaryColor/55 to-transparent pointer-events-none"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-radial from-secondaryColor/20 via-transparent to-transparent blur-2xl pointer-events-none -z-10"
       />
     </div>
   );
