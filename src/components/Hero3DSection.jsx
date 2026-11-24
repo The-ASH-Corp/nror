@@ -79,13 +79,18 @@ export default function Hero3DSection() {
           },
           0.58
         )
-        .from(
+        .fromTo(
           '.hero-cta',
           {
             y: 22,
             opacity: 0,
+          },
+          {
+            y: 0,
+            opacity: 1,
             duration: 0.85,
             stagger: 0.12,
+            clearProps: 'transform,opacity',
           },
           0.74
         )
@@ -207,11 +212,11 @@ export default function Hero3DSection() {
       ref={sectionRef}
       className="relative min-h-screen lg:h-screen w-full flex items-center overflow-hidden bg-primaryColor"
     >
-      {/* Ambient Cinematic Background Glows */}
+      {/* Ambient Dark-Burgundy Studio Atmosphere (Blends seamlessly with #350810) */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[18%] right-[12%] w-[520px] h-[520px] bg-gradient-to-br from-[#780F27]/35 via-[#C49A58]/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-[8%] left-[6%] w-[420px] h-[420px] bg-[#C49A58]/10 rounded-full blur-3xl" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primaryColor/65 via-transparent to-primaryColor" />
+        <div className="absolute top-[18%] right-[12%] w-[520px] h-[520px] bg-gradient-to-br from-[#780F27]/20 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-[8%] left-[6%] w-[420px] h-[420px] bg-[#780F27]/12 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primaryColor/70 via-transparent to-primaryColor" />
       </div>
 
       {/* Two-Column Editorial Hero Layout */}
@@ -252,7 +257,7 @@ export default function Hero3DSection() {
               </a>
               <a
                 href="#about"
-                className="hero-cta w-full sm:w-auto px-8 py-3.5 border border-goldColor/50 hover:border-goldColor hover:bg-goldColor/10 text-silverColor text-xs uppercase tracking-[0.16em] rounded-xs text-center transition-all duration-300 font-medium hover:scale-[1.03] active:scale-[0.97]"
+                className="hero-cta w-full sm:w-auto px-8 py-3.5 border border-goldColor/50 hover:border-goldColor hover:bg-goldColor/10 text-silverColor text-xs uppercase tracking-[0.16em] rounded-xs text-center transition-[color,background-color,border-color,transform] duration-300 font-medium hover:scale-[1.03] active:scale-[0.97]"
               >
                 DISCOVER NROR
               </a>
@@ -260,7 +265,7 @@ export default function Hero3DSection() {
           </div>
 
           {/* Right Column: Exact NROR Bottle PNG with 2.5D Floating, Parallax & GSAP Scroll */}
-          <div className="lg:col-span-6 flex items-center justify-center w-full lg:pt-6">
+          <div className="lg:col-span-6 flex items-center justify-center w-full pt-10 sm:pt-12 lg:pt-20">
             <NrorBottleShowcase
               bottleWrapRef={bottleWrapRef}
               bottleScrollRef={bottleScrollRef}
@@ -291,9 +296,6 @@ export default function Hero3DSection() {
         aria-hidden="true"
         className="hidden sm:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex-col items-center gap-2 pointer-events-none"
       >
-        <span className="text-[10px] uppercase tracking-[0.26em] text-goldColor/75 font-medium">
-          Scroll to Experience
-        </span>
         <span className="w-[1px] h-7 bg-gradient-to-b from-goldColor/80 to-transparent animate-pulse" />
       </div>
     </section>

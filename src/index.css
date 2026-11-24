@@ -58,7 +58,7 @@
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   letter-spacing: 0.16em;
-  transition: all 0.3s ease;
+  transition: filter 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .gold-gradient-btn:hover {

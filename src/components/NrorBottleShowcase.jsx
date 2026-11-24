@@ -50,13 +50,13 @@ export default function NrorBottleShowcase({
         });
       }
 
-      // Gentle ambient breathing on floating scent motes
+      // Understated ambient drift on subtle dust motes
       gsap.utils.toArray('.nror-mote').forEach((el, i) => {
         const m = MOTES[i % MOTES.length];
         gsap.to(el, {
-          y: -26,
-          x: i % 2 === 0 ? 10 : -10,
-          opacity: 0.75,
+          y: -22,
+          x: i % 2 === 0 ? 8 : -8,
+          opacity: 0.28,
           duration: m.dur,
           delay: m.delay,
           repeat: -1,
@@ -115,7 +115,7 @@ export default function NrorBottleShowcase({
       className="relative w-full max-w-[540px] lg:max-w-[600px] mx-auto flex flex-col items-center justify-center select-none pointer-events-none"
       style={{ perspective: '1200px' }}
     >
-      {/* Layered Studio Backlight & Warm Amber/Crimson Rim Aura behind the Bottle */}
+      {/* Understated Deep-Burgundy Studio Depth Aura (Blends naturally into #350810) */}
       <div
         ref={lightShiftRef}
         aria-hidden="true"
@@ -123,29 +123,27 @@ export default function NrorBottleShowcase({
       >
         <div
           ref={auraRef}
-          className="relative w-[300px] h-[380px] sm:w-[380px] sm:h-[460px] lg:w-[440px] lg:h-[520px] flex items-center justify-center"
+          className="relative w-[280px] h-[360px] sm:w-[340px] sm:h-[420px] lg:w-[390px] lg:h-[470px] flex items-center justify-center"
         >
-          {/* Deep Crimson Halo */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#780F27]/55 via-[#C49A58]/22 to-transparent blur-3xl" />
-          {/* Warm Champagne-Gold Key Glow behind lower-right glass edge */}
-          <div className="absolute bottom-8 right-6 w-52 h-52 sm:w-64 sm:h-64 rounded-full bg-[#C49A58]/25 blur-3xl" />
-          {/* Soft Rose Highlight behind upper cap */}
-          <div className="absolute top-6 left-10 w-44 h-44 rounded-full bg-[#9e1435]/30 blur-3xl" />
+          {/* Soft Dark-Burgundy Back Depth Shadow */}
+          <div className="absolute inset-4 rounded-full bg-[#1a0308]/55 blur-3xl" />
+          {/* Very Subtle Wine-Red Rim Separation (No yellow/amber halo) */}
+          <div className="absolute inset-8 rounded-full bg-gradient-to-tr from-[#5c0b1e]/25 via-[#780F27]/15 to-transparent blur-3xl" />
         </div>
       </div>
 
-      {/* Subtle Floating Golden Motes */}
+      {/* Whisper-Subtle Ambient Dust Motes */}
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
         {MOTES.map((m, idx) => (
           <span
             key={idx}
-            className="nror-mote absolute rounded-full bg-[#f5dfa9] opacity-25"
+            className="nror-mote absolute rounded-full bg-[#e6c485] opacity-10"
             style={{
               left: m.left,
               top: m.top,
-              width: m.size,
-              height: m.size,
-              boxShadow: '0 0 10px rgba(196, 154, 88, 0.75)',
+              width: m.size * 0.85,
+              height: m.size * 0.85,
+              boxShadow: '0 0 6px rgba(196, 154, 88, 0.22)',
             }}
           />
         ))}
@@ -169,7 +167,7 @@ export default function NrorBottleShowcase({
                 className="block w-auto h-[272px] sm:h-[344px] md:h-[384px] lg:h-[432px] xl:h-[480px] max-w-full object-contain"
                 style={{
                   filter:
-                    'drop-shadow(0 28px 34px rgba(12, 1, 4, 0.78)) drop-shadow(0 0 26px rgba(196, 154, 88, 0.18))',
+                    'drop-shadow(0 28px 36px rgba(14, 1, 5, 0.84)) drop-shadow(0 0 18px rgba(120, 15, 39, 0.2))',
                 }}
               />
             </div>
@@ -181,7 +179,7 @@ export default function NrorBottleShowcase({
       <div
         ref={shadowRef}
         aria-hidden="true"
-        className="mt-1 sm:mt-2 w-44 sm:w-56 lg:w-64 h-7 rounded-full bg-black/65 blur-xl opacity-60 pointer-events-none"
+        className="mt-1 sm:mt-2 w-40 sm:w-52 lg:w-60 h-6 rounded-full bg-[#120105]/80 blur-xl opacity-55 pointer-events-none"
       />
     </div>
   );

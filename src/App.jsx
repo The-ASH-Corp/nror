@@ -196,7 +196,6 @@ export default function App() {
         className="fixed top-3 sm:top-4 inset-x-0 z-50 px-3 sm:px-6"
       >
         <div className="max-w-7xl mx-auto">
-          {/* #4d1c2b */}
           <div className="relative h-16 sm:h-[68px] flex items-center justify-between rounded-full bg-[#4d1c2b]/50 backdrop-blur-lg shadow-[0_8px_32px_rgba(0,0,0,0.15)] pl-5 pr-2 sm:pl-7">
             <span
               aria-hidden="true"
@@ -208,7 +207,6 @@ export default function App() {
               }}
             />
 
-            {/* Left: Logo */}
             <motion.a
               href="#hero"
               className="flex flex-col items-center shrink-0 leading-none"
@@ -222,7 +220,6 @@ export default function App() {
               </span>
             </motion.a>
 
-            {/* Center: Navigation (desktop) */}
             <nav className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 text-[13px] text-silverColor font-medium">
               {navLinks.map((link, i) => (
                 <motion.a
@@ -265,7 +262,6 @@ export default function App() {
                 </AnimatePresence>
               </motion.button>
 
-              {/* Pill CTA with circular arrow */}
               <motion.a
                 href="#collection"
                 className="hidden sm:inline-flex items-center gap-3 gold-gradient-btn rounded-full pl-6 pr-1.5 h-11 text-[13px] font-semibold"
@@ -282,7 +278,6 @@ export default function App() {
                 </motion.span>
               </motion.a>
 
-              {/* Mobile menu button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="lg:hidden w-10 h-10 flex items-center justify-center rounded-full text-goldColor hover:text-white border border-goldColor/30"
@@ -293,7 +288,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Mobile dropdown */}
           <AnimatePresence>
             {mobileMenuOpen && (
               <motion.div
