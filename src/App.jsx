@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import {
   ShoppingBag,
   ArrowRight,
@@ -13,7 +13,7 @@ import {
   Facebook
 } from 'lucide-react';
 import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
-import BottleSplashAnimation from './components/BottleSplashAnimation';
+import Hero3DSection from './components/Hero3DSection';
 
 // Scroll-linked section wrapper: sections ease in as they enter and soften as they leave,
 // so one section blends into the next instead of cutting hard.
@@ -172,75 +172,6 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(products[0]);
   const [toastMessage, setToastMessage] = useState('');
 
-  const heroProgressRef = useRef(0);
-
-  useEffect(() => {
-    const normalizeWheel = (e) => {
-      let d = e.deltaY;
-      if (e.deltaMode === 1) d *= 16;
-      else if (e.deltaMode === 2) d *= window.innerHeight;
-      return Math.max(-80, Math.min(80, d));
-    };
-
-    const onWheel = (e) => {
-      const isAtTop = window.scrollY <= 10;
-
-      // 1. Scrolling down from top before frames complete: advance frames
-      if (isAtTop && e.deltaY > 0 && heroProgressRef.current < 1) {
-        e.preventDefault();
-        const next = Math.min(1, heroProgressRef.current + normalizeWheel(e) * 0.0009);
-        heroProgressRef.current = next;
-
-      }
-      // 2. Scrolling up when at the top: scrub backwards from last frame to first
-      else if (isAtTop && e.deltaY < 0 && heroProgressRef.current > 0) {
-        e.preventDefault();
-        const prev = Math.max(0, heroProgressRef.current + normalizeWheel(e) * 0.0009);
-        heroProgressRef.current = prev;
-
-      }
-    };
-
-    // Touch support for mobile devices
-    let touchStartY = 0;
-    const onTouchStart = (e) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const onTouchMove = (e) => {
-      const isAtTop = window.scrollY <= 10;
-      const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
-
-      // Scrolling down before reaching end of splash
-      if (isAtTop && deltaY > 0 && heroProgressRef.current < 1) {
-        e.preventDefault();
-        const next = Math.min(1, heroProgressRef.current + deltaY * 0.004);
-        heroProgressRef.current = next;
-
-        touchStartY = touchY;
-      }
-      // Scrolling up while at the top: reverse frames back towards frame 1
-      else if (isAtTop && deltaY < 0 && heroProgressRef.current > 0) {
-        e.preventDefault();
-        const prev = Math.max(0, heroProgressRef.current + deltaY * 0.004);
-        heroProgressRef.current = prev;
-
-        touchStartY = touchY;
-      }
-    };
-
-    window.addEventListener('wheel', onWheel, { passive: false });
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
-
-    return () => {
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
-    };
-  }, []);
-
   const handleAddToCart = (product) => {
     setCartCount(prev => prev + 1);
     setToastMessage(`${product.name} added to your bag.`);
@@ -256,7 +187,7 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-primaryColor text-silverColor font-sans antialiased selection:bg-secondaryColor selection:text-goldColor overflow-x-hidden">
+    <div className="min-h-screen bg-primaryColor text-silverColor font-sans antialiased selection:bg-secondaryColor selection:text-goldColor overflow-x-clip">
       <ScrollProgressBar />
       <motion.header
         initial={{ y: -80, opacity: 0 }}
@@ -414,95 +345,8 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* SECTION 01 – HERO BANNER (FIXED 100vh - NO HEIGHT EXTENSION) */}
-      <SmoothSection variant="hero" id="hero" className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-primaryColor pt-20 sm:pt-24 lg:pt-0">
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-[#780F27]/25 to-transparent rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ scale: [1.15, 1, 1.15], opacity: [0.1, 0.2, 0.1] }}
-            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-[#C49A58]/10 rounded-full blur-3xl"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-primaryColor/60 via-transparent to-primaryColor"></div>
-          <FloatingParticles count={14} />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
-
-            {/* Left Column: Brand Copy & Actions (Stays in place throughout) */}
-            <div className="lg:col-span-6 text-center lg:text-left space-y-5 sm:space-y-6">
-
-              <motion.p
-                custom={0.2}
-                variants={textReveal}
-                initial="hidden"
-                animate="visible"
-                className="text-[11px] sm:text-xs uppercase tracking-eyebrow text-goldColor font-semibold"
-              >
-                AN INDIAN FRAGRANCE HOUSE
-              </motion.p>
-
-              <motion.h1
-                custom={0.35}
-                variants={textReveal}
-                initial="hidden"
-                animate="visible"
-                className="text-shimmer bg-gradient-to-r from-[#f5dfa9] via-[#e2be79] via-[#c58b59] to-[#9e5b4e] bg-clip-text text-transparent font-serif text-4xl sm:text-5xl md:text-4xl lg:text-6xl font-bold tracking-tight leading-[1.08]"
-              >
-                LEAVE A LASTING IMPRESSION
-              </motion.h1>
-
-              <motion.p
-                custom={0.5}
-                variants={textReveal}
-                initial="hidden"
-                animate="visible"
-                className="text-xs sm:text-sm md:text-[15px] text-silverColor/90 leading-relaxed font-light max-w-xl mx-auto lg:mx-0"
-              >
-                Crafted for those who define their own identity. Experience fragrance, elegance and individuality with NROR.
-              </motion.p>
-
-              <motion.div
-                custom={0.65}
-                variants={textReveal}
-                initial="hidden"
-                animate="visible"
-                className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
-              >
-                <motion.a
-                  href="#collection"
-                  className="w-full sm:w-auto px-8 py-3.5 gold-gradient-btn text-xs uppercase tracking-[0.16em] rounded-xs text-center"
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ duration: 0.2, ease: appleEase }}
-                >
-                  EXPLORE COLLECTION
-                </motion.a>
-                <motion.a
-                  href="#about"
-                  className="w-full sm:w-auto px-8 py-3.5 border border-goldColor/50 hover:border-goldColor hover:bg-goldColor/10 text-silverColor text-xs uppercase tracking-[0.16em] rounded-xs text-center transition-colors font-medium"
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ duration: 0.2, ease: appleEase }}
-                >
-                  DISCOVER NROR
-                </motion.a>
-              </motion.div>
-            </div>
-
-            {/* Right Column: Scroll-Scrub Animation */}
-            <div className="lg:col-span-6 flex items-center justify-center w-full pt-10">
-              <BottleSplashAnimation progressRef={heroProgressRef} />
-            </div>
-
-          </div>
-        </div>
-      </SmoothSection>
+      {/* SECTION 01 – CINEMATIC 3D HERO BANNER (R3F + THREE.JS + GSAP SCROLLTRIGGER) */}
+      <Hero3DSection />
 
       {/* SECTION 02 – BRAND INTRODUCTION */}
       <SmoothSection id="about" className="py-24 md:py-32 bg-primaryColor relative overflow-hidden">

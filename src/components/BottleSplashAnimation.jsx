@@ -5,7 +5,7 @@ const SMOOTHING = 5;
 
 const getFrameSrc = (index) => {
   const frameNum = String(index).padStart(3, '0');
-  return `/images/heroSection/ezgif-frame-${frameNum}.png`;
+  return `/images/heroSection/ezgif-frame-${frameNum}.jpg`;
 };
 
 export default function BottleSplashAnimation({ progressRef }) {
@@ -17,7 +17,6 @@ export default function BottleSplashAnimation({ progressRef }) {
   const lastDrawnRef = useRef(-1);
   const layoutRef = useRef(null);
 
-  // Compute "cover" draw rect once per resize instead of every frame
   const computeLayout = (img) => {
     const canvas = canvasRef.current;
     if (!canvas || !img) return;
@@ -35,7 +34,6 @@ export default function BottleSplashAnimation({ progressRef }) {
     layoutRef.current = { x: (cw - w) / 2, y: (ch - h) / 2, w, h };
   };
 
-  // Find nearest decoded frame so we never draw a blank/undecoded image
   const nearestReady = (idx) => {
     const ready = readyRef.current;
     if (ready[idx]) return idx;
@@ -159,6 +157,7 @@ export default function BottleSplashAnimation({ progressRef }) {
             'radial-gradient(ellipse 58% 60% at 49% 50%, black 26%, rgba(0,0,0,0.85) 48%, rgba(0,0,0,0.35) 68%, transparent 88%)',
           willChange: 'contents',
         }}
+
       />
       {/* Extra right-edge feather so the right border melts seamlessly into the hero background */}
       <div

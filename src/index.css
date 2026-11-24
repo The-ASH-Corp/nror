@@ -134,6 +134,12 @@
   transform-origin: left;
 }
 
+/* Clip wrapper for GSAP masked headline line reveals */
+.hero-line-mask {
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .text-shimmer { animation: none; }
   .gold-gradient-btn::after,
